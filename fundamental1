@@ -1,0 +1,173 @@
+#include <iostream>
+using namespace std;
+struct elem
+{
+    int data;
+    elem* next;
+};
+
+void add(elem **head, int n) // добавление
+ {
+    elem* New_one = new elem;
+    New_one->data = n;
+    New_one->next = New_one;
+
+    if (*head == nullptr)
+    {
+        New_one->next = New_one;
+        *head = New_one;
+        return;
+    }
+    elem* cursor = *head;
+    while (cursor->next != *head)
+    {
+        cursor = cursor->next;
+    }
+    cursor->next = New_one;
+    New_one->next = *head;
+    cursor = New_one;
+    return;
+
+}
+
+void deleteALL(elem **head)
+{
+    if (*head == nullptr)
+    {
+        cout << "Список уже удален" << endl;
+        return;
+    }
+       
+    elem* cursor = *head;
+    elem* rope = *head;
+    cursor = cursor->next;
+    do
+    {
+        elem* del_cursor = new elem;
+        rope->next = del_cursor;
+        del_cursor->next = cursor;
+        cursor = cursor->next;
+        delete(del_cursor);
+        rope->next = cursor;
+    } while (cursor != *head);
+    *head = nullptr;
+}
+
+void deleteOne(elem** head, int n)
+{
+    if (*head == nullptr)
+    {
+        cout << "Список уже удален" << endl;
+        return;
+    }
+    elem* cursor = *head;
+   
+        do
+        {
+                if (cursor->data == n)
+                {
+                    elem* SP = cursor->next;
+                    cursor->next = cursor->next->next;
+                    delete (SP);
+                    cursor = cursor->next;
+                }
+                else
+                    cursor = cursor->next;
+        } while (cursor != *head); 
+}
+
+bool find_elem(elem** head, int n)
+{
+    if (*head == nullptr)
+    {
+        cout << "Пустой" << endl;
+        return 0;
+    }
+    elem* cursor = *head;
+    do
+    {
+        if (cursor->data == n)
+        {
+            return 1;
+        }
+        cursor = cursor->next;
+    } while (cursor != *head);
+    return 0;
+}
+
+ void printuro(elem* head)
+ {
+     if (head == nullptr)
+     {
+         cout << "Список не инициализирован!" << endl;
+         return;
+     }
+     elem* H = head;
+     if (H->next == head)
+     {
+         cout << H->data << "->";
+     }
+     else {
+         do
+         {
+             cout << H << " (" << H->data << ")" "->" << endl;
+             H = H->next;
+         } while (H != head);
+     }
+         cout << head->data << "(Head)";
+         cout<<endl;
+         cout << endl;
+    
+ }
+
+void difference(elem** head1, elem** head2, elem** head3)
+{
+    if (head1 == nullptr)
+    {
+        cout << "Список 1 не инициализирован!" << endl;
+        return;
+    }
+    if (head2 == nullptr)
+    {
+        cout << "Список не инициализирован!" << endl;
+        return;
+    }
+    elem* cursor1 = *head1;
+    elem* cursor2 = *head2;
+    do
+    {
+        do
+        {
+          cursor2 = cursor2->next;
+
+        } while (cursor2 != *head2 && cursor1->data != cursor2->data);
+
+        if (cursor1->data != cursor2->data )
+        {
+            add(head3, cursor1->data);
+        }
+        
+        cursor1 = cursor1->next;
+    } while (cursor1 != *head1);
+}
+int main()
+{
+    elem* head_main = nullptr;
+    elem* head_sub = nullptr;
+    elem* head_result = nullptr;
+
+   for (int i = 1; i<7; i++)
+    {
+        add(&head_main,i);  
+    }
+   printuro(head_main);
+   deleteALL(&head_main);
+   printuro(head_main);
+  /* for (int i = 3; i < 5; i++)
+   {
+       add(&head_sub, i);
+   }*/
+  // printuro(head_sub);
+  // difference(&head_main, &head_sub, &head_result);
+  // printuro(head_result);
+}
